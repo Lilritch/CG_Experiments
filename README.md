@@ -34,6 +34,24 @@ The easiest handoff is:
 
 The project now searches for `models/bird.obj` from both the current working directory and the executable directory, which makes Windows launches more reliable.
 
+Recommended zip layout:
+
+    submission_windows/
+    ├── WINDOWS_RUN_ME.txt
+    ├── README_project.md
+    ├── build_windows.bat
+    ├── bird_scene.exe        (if you include a prebuilt app)
+    ├── freeglut.dll          (if your Windows build needs it)
+    └── models/
+        └── bird.obj
+
+To prepare that folder on macOS or Linux:
+
+    chmod +x prepare_submission.sh
+    ./prepare_submission.sh
+
+This creates a `submission_windows/` folder you can zip and send.
+
 ### Windows (recommended: CMake)
 
 If CMake and a compiler are already installed:
@@ -113,6 +131,7 @@ If the app starts but cannot open the bird model, run it from the repo root or k
 - Updated the Makefile to link with macOS frameworks on Darwin, `freeglut` on MSYS/MinGW, and `GLUT` on Linux.
 - Added a CMake build file for cross-platform builds.
 - Added `build_windows.bat` for a simpler Windows build path.
+- Added `prepare_submission.sh` and `WINDOWS_RUN_ME.txt` to help create a professor-friendly Windows submission folder.
 - Added safer runtime lookup for `models/bird.obj` so Windows launches are less dependent on the current working directory.
 
 ## Controls

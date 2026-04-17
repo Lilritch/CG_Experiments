@@ -1,0 +1,31 @@
+Bird Scene Windows Quick Start
+
+Contents you should have in this folder:
+- bird_scene.exe                (optional prebuilt app)
+- freeglut.dll                 (optional, needed by some Windows builds)
+- models\bird.obj
+- build_windows.bat
+- README_project.md
+
+Fastest way to run:
+1. If bird_scene.exe is included, double-click bird_scene.exe.
+2. If Windows reports that freeglut.dll is missing, place freeglut.dll in the same folder as bird_scene.exe and try again.
+
+If no executable is included:
+1. Install CMake and a C++ compiler / Visual Studio with Desktop development for C++.
+2. Double-click build_windows.bat.
+3. After build finishes, look for:
+   - build\Release\bird_scene.exe
+   - or build\bird_scene.exe
+4. Run the executable.
+
+Important:
+- Keep the models folder with the project or next to the executable.
+- If the program opens but the bird model is missing, make sure models\bird.obj was sent too.
+
+Recommended submission package from the student:
+- bird_scene.exe
+- freeglut.dll
+- models\
+- WINDOWS_RUN_ME.txt
+- README_project.md
