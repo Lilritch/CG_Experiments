@@ -708,129 +708,215 @@ void drawBird(float flapAngle) {
         glPushMatrix(); glTranslatef(0.1f,0,0.2f); glRotatef(-15,0,1,0); glScalef(1.5f,0.04f,0.25f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
 
     } else if (birdLook == 2) {
-        // Colorful parrot-like bird with more facial detail
-        const float wingColors[5][3] = {
-            {0.07f,0.82f,0.85f},{0.96f,0.55f,0.08f},
-            {0.12f,0.75f,0.30f},{0.95f,0.17f,0.55f},{0.35f,0.65f,0.95f}
-        };
+        // Realistic Hawk / Red-tailed Hawk
 
         // Body
-        glColor3f(0.90f,0.06f,0.15f);
-        glPushMatrix(); glScalef(0.95f,0.72f,1.18f); glutSolidSphere(0.62,26,22); glPopMatrix();
-
-        glColor3f(1.0f, 0.82f, 0.44f);
+        glColor3f(0.42f, 0.26f, 0.10f);
         glPushMatrix();
-        glTranslatef(0.0f, -0.06f, -0.02f);
-        glScalef(0.70f, 0.46f, 0.86f);
-        glutSolidSphere(0.48f, 20, 18);
+        glScalef(1.05f, 0.70f, 1.40f);
+        glutSolidSphere(0.58f, 28, 22);
         glPopMatrix();
 
-        // Head
-        glColor3f(0.88f,0.05f,0.13f);
-        glPushMatrix(); glTranslatef(0,0.42f,-0.76f); glScalef(0.74f,0.80f,0.74f); glutSolidSphere(0.42,22,18); glPopMatrix();
-
-        glColor3f(0.30f, 0.82f, 0.90f);
+        glColor3f(0.92f, 0.88f, 0.76f);
         glPushMatrix();
-        glTranslatef(-0.16f, 0.33f, -0.88f);
-        glScalef(0.18f, 0.16f, 0.12f);
-        glutSolidSphere(1.0f, 14, 12);
-        glPopMatrix();
-        glPushMatrix();
-        glTranslatef(0.16f, 0.33f, -0.88f);
-        glScalef(0.18f, 0.16f, 0.12f);
-        glutSolidSphere(1.0f, 14, 12);
+        glTranslatef(0.0f, -0.14f, -0.10f);
+        glScalef(0.72f, 0.52f, 0.90f);
+        glutSolidSphere(0.52f, 22, 18);
         glPopMatrix();
 
-        glColor3f(0.98f,0.72f,0.10f);
-        glPushMatrix(); glTranslatef(0,0.43f,-1.09f); glRotatef(-90,1,0,0); glutSolidCone(0.12,0.34,12,2); glPopMatrix();
-        glColor3f(0.90f,0.54f,0.10f);
-        glPushMatrix(); glTranslatef(0,0.28f,-1.00f); glRotatef(90,1,0,0); glutSolidCone(0.075,0.22,10,2); glPopMatrix();
-
-        glColor3f(0.98f, 0.98f, 0.98f);
-        glPushMatrix(); glTranslatef(-0.19f,0.46f,-0.82f); glutSolidSphere(0.10,14,14); glPopMatrix();
-        glPushMatrix(); glTranslatef( 0.19f,0.46f,-0.82f); glutSolidSphere(0.10,14,14); glPopMatrix();
-        glColor3f(0.88f, 0.60f, 0.05f);
-        glPushMatrix(); glTranslatef(-0.20f,0.45f,-0.90f); glutSolidSphere(0.055,12,12); glPopMatrix();
-        glPushMatrix(); glTranslatef( 0.20f,0.45f,-0.90f); glutSolidSphere(0.055,12,12); glPopMatrix();
-        glColor3f(0.04f,0.04f,0.10f);
-        glPushMatrix(); glTranslatef(-0.21f,0.45f,-0.93f); glutSolidSphere(0.028,10,10); glPopMatrix();
-        glPushMatrix(); glTranslatef( 0.21f,0.45f,-0.93f); glutSolidSphere(0.028,10,10); glPopMatrix();
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glPushMatrix(); glTranslatef(-0.17f,0.49f,-0.90f); glutSolidSphere(0.015,8,8); glPopMatrix();
-        glPushMatrix(); glTranslatef( 0.17f,0.49f,-0.90f); glutSolidSphere(0.015,8,8); glPopMatrix();
-
-        // Crest feathers
-        glColor3f(0.80f,0.18f,0.55f);
-        for (int fe = 0; fe < 3; ++fe) {
+        glColor3f(0.28f, 0.16f, 0.06f);
+        for (int s = 0; s < 5; ++s) {
             glPushMatrix();
-            glTranslatef(-0.07f+fe*0.07f, 0.86f+fe*0.07f, -0.88f);
-            glRotatef(-18.0f+fe*10.0f, 0,0,1);
-            glRotatef(-8.0f, 1,0,0);
-            glScalef(0.06f, 0.32f+fe*0.04f, 0.06f);
-            drawBox(0.5f,0.5f,0.5f);
+            glTranslatef(-0.18f + s * 0.09f, -0.22f, -0.22f);
+            glScalef(0.055f, 0.32f, 0.04f);
+            drawBox(0.5f, 0.5f, 0.5f);
             glPopMatrix();
         }
 
+        // Head
+        glColor3f(0.32f, 0.18f, 0.06f);
+        glPushMatrix();
+        glTranslatef(0.0f, 0.36f, -0.82f);
+        glScalef(0.72f, 0.76f, 0.72f);
+        glutSolidSphere(0.38f, 24, 18);
+        glPopMatrix();
+
+        glColor3f(0.90f, 0.86f, 0.76f);
+        glPushMatrix();
+        glTranslatef(0.0f, 0.20f, -0.94f);
+        glScalef(0.60f, 0.44f, 0.40f);
+        glutSolidSphere(0.30f, 18, 14);
+        glPopMatrix();
+
+        glColor3f(0.22f, 0.12f, 0.04f);
+        glPushMatrix();
+        glTranslatef(-0.14f, 0.16f, -0.98f);
+        glScalef(0.10f, 0.28f, 0.08f);
+        drawBox(0.5f, 0.5f, 0.5f);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0.14f, 0.16f, -0.98f);
+        glScalef(0.10f, 0.28f, 0.08f);
+        drawBox(0.5f, 0.5f, 0.5f);
+        glPopMatrix();
+
+        // Beak
+        glColor3f(0.95f, 0.80f, 0.10f);
+        glPushMatrix();
+        glTranslatef(0.0f, 0.30f, -1.12f);
+        glScalef(0.18f, 0.12f, 0.14f);
+        glutSolidSphere(1.0f, 10, 8);
+        glPopMatrix();
+
+        glColor3f(0.20f, 0.18f, 0.16f);
+        glPushMatrix();
+        glTranslatef(0.0f, 0.26f, -1.22f);
+        glRotatef(28.0f, 1, 0, 0);
+        glScalef(0.10f, 0.10f, 0.34f);
+        glutSolidSphere(1.0f, 10, 8);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0.0f, 0.12f, -1.38f);
+        glScalef(0.08f, 0.09f, 0.12f);
+        glutSolidSphere(1.0f, 8, 6);
+        glPopMatrix();
+
+        glColor3f(0.30f, 0.28f, 0.24f);
+        glPushMatrix();
+        glTranslatef(0.0f, 0.20f, -1.18f);
+        glRotatef(-12.0f, 1, 0, 0);
+        glScalef(0.09f, 0.08f, 0.26f);
+        glutSolidSphere(1.0f, 10, 8);
+        glPopMatrix();
+
+        // Eyes
+        glColor3f(0.90f, 0.62f, 0.05f);
+        glPushMatrix(); glTranslatef(-0.22f, 0.40f, -0.94f); glutSolidSphere(0.082f, 14, 12); glPopMatrix();
+        glPushMatrix(); glTranslatef( 0.22f, 0.40f, -0.94f); glutSolidSphere(0.082f, 14, 12); glPopMatrix();
+        glColor3f(0.04f, 0.03f, 0.03f);
+        glPushMatrix(); glTranslatef(-0.23f, 0.40f, -0.99f); glutSolidSphere(0.040f, 10, 10); glPopMatrix();
+        glPushMatrix(); glTranslatef( 0.23f, 0.40f, -0.99f); glutSolidSphere(0.040f, 10, 10); glPopMatrix();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glPushMatrix(); glTranslatef(-0.20f, 0.43f, -0.99f); glutSolidSphere(0.016f, 8, 8); glPopMatrix();
+        glPushMatrix(); glTranslatef( 0.20f, 0.43f, -0.99f); glutSolidSphere(0.016f, 8, 8); glPopMatrix();
+        glColor3f(0.22f, 0.12f, 0.05f);
+        glPushMatrix(); glTranslatef(-0.22f, 0.48f, -0.90f); glScalef(0.18f, 0.05f, 0.10f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
+        glPushMatrix(); glTranslatef( 0.22f, 0.48f, -0.90f); glScalef(0.18f, 0.05f, 0.10f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
+
         // Wings
         for (int side = -1; side <= 1; side += 2) {
+            float sf = float(side);
+
+            glColor3f(0.40f, 0.24f, 0.09f);
+            glPushMatrix();
+            glTranslatef(sf * 0.52f, 0.08f, 0.10f);
+            glRotatef(sf * (flapAngle * 0.40f + 14.0f), 0, 0, 1);
+            glScalef(0.55f, 0.12f, 0.58f);
+            drawBox(0.5f, 0.5f, 0.5f);
+            glPopMatrix();
+
+            float secColors[5][3] = {
+                {0.44f,0.27f,0.10f},{0.48f,0.30f,0.12f},{0.46f,0.28f,0.11f},
+                {0.42f,0.25f,0.09f},{0.50f,0.32f,0.13f}
+            };
             for (int i = 0; i < 5; ++i) {
-                glColor3f(wingColors[i][0], wingColors[i][1], wingColors[i][2]);
+                glColor3f(secColors[i][0], secColors[i][1], secColors[i][2]);
                 glPushMatrix();
-                float offset = side * (0.58f + 0.19f*i*birdWingSpread);
-                float zoff   = -0.08f + i*0.18f;
-                float yoff   =  0.03f + i*0.02f;
-                glTranslatef(offset, yoff, zoff);
-                glRotatef(side*(18.0f+birdWingSpread*8.0f+flapAngle*0.55f+i*4.0f), 0,0,1);
-                glRotatef(-birdWingLift*(8.0f+i*2.0f), 1,0,0);
-                glScalef(0.36f,0.08f,0.27f);
-                drawBox(0.5f,0.5f,0.5f);
+                float xOff = sf * (0.62f + i * 0.14f);
+                glTranslatef(xOff, 0.04f - i * 0.015f, 0.06f + i * 0.06f);
+                glRotatef(sf * (flapAngle * 0.45f + 10.0f + i * 2.5f), 0, 0, 1);
+                glRotatef(-6.0f - i * 2.0f, 1, 0, 0);
+                glScalef(0.22f, 0.06f, 0.52f + i * 0.04f);
+                drawBox(0.5f, 0.5f, 0.5f);
+                glPopMatrix();
+            }
+
+            float priColors[6][3] = {
+                {0.26f,0.15f,0.05f},{0.28f,0.16f,0.06f},{0.30f,0.17f,0.06f},
+                {0.32f,0.18f,0.07f},{0.28f,0.16f,0.05f},{0.24f,0.14f,0.05f}
+            };
+            for (int i = 0; i < 6; ++i) {
+                glColor3f(priColors[i][0], priColors[i][1], priColors[i][2]);
+                glPushMatrix();
+                float xOff = sf * (1.32f + i * 0.18f);
+                float zOff = -0.08f + i * 0.14f;
+                glTranslatef(xOff, -0.02f - i * 0.018f, zOff);
+                glRotatef(sf * (flapAngle * 0.55f + 18.0f + i * 4.0f), 0, 0, 1);
+                glRotatef(-10.0f - i * 3.0f, 1, 0, 0);
+                glRotatef(sf * (i * 3.5f), 0, 1, 0);
+                glScalef(0.16f, 0.05f, 0.70f + i * 0.05f);
+                drawBox(0.5f, 0.5f, 0.5f);
                 glPopMatrix();
             }
         }
 
-        for (int side = -1; side <= 1; side += 2) {
-            glColor3f(0.06f, 0.70f, 0.38f);
+        // Tail
+        for (int i = 0; i < 6; ++i) {
+            float t = (i / 5.0f) - 0.5f;
+            if (i % 2 == 0)
+                glColor3f(0.76f, 0.22f, 0.06f);
+            else
+                glColor3f(0.65f, 0.17f, 0.04f);
             glPushMatrix();
-            glTranslatef(side * 0.48f, 0.16f, -0.04f);
-            glRotatef(side * 18.0f, 0, 0, 1);
-            glRotatef(side * 14.0f, 0, 1, 0);
-            glScalef(0.28f, 0.14f, 0.48f);
-            glutSolidSphere(0.58f, 16, 14);
+            glTranslatef(t * 0.60f, -0.30f, 0.70f + fabsf(t) * 0.08f);
+            glRotatef(-22.0f + t * 12.0f, 1, 0, 0);
+            glRotatef(t * 8.0f,  0, 1, 0);
+            glScalef(0.22f, 0.055f, 0.62f);
+            drawBox(0.5f, 0.5f, 0.5f);
             glPopMatrix();
         }
+        glColor3f(0.15f, 0.10f, 0.05f);
+        glPushMatrix();
+        glTranslatef(0.0f, -0.34f, 1.12f);
+        glRotatef(-22.0f, 1, 0, 0);
+        glScalef(0.72f, 0.05f, 0.12f);
+        drawBox(0.5f, 0.5f, 0.5f);
+        glPopMatrix();
 
-        // Tail feathers
-        const float tailColors[4][3] = {
-            {0.76f,0.12f,0.82f},{0.07f,0.82f,0.85f},
-            {0.76f,0.12f,0.82f},{0.07f,0.82f,0.85f}
-        };
-        for (int i = 0; i < 4; ++i) {
-            glColor3f(tailColors[i][0],tailColors[i][1],tailColors[i][2]);
-            glPushMatrix();
-            glTranslatef(-0.42f+i*0.28f, -0.46f, 0.62f+0.04f*i);
-            glRotatef(-26.0f+i*6.0f, 1,0,0);
-            glScalef(0.28f,0.07f,0.48f);
-            drawBox(0.5f,0.5f,0.5f);
-            glPopMatrix();
-        }
-
-        // Central tail
-        glColor3f(0.20f,0.20f,0.24f);
-        glPushMatrix(); glTranslatef(0,-0.22f,0.74f); glScalef(0.24f,0.08f,0.58f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
-
-        glColor3f(0.42f, 0.42f, 0.46f);
+        // Legs & talons
         for (int side = -1; side <= 1; side += 2) {
+            float sf = float(side);
+
+            glColor3f(0.88f, 0.82f, 0.65f);
             glPushMatrix();
-            glTranslatef(side * 0.18f, -0.60f, 0.18f);
-            glScalef(0.05f, 0.24f, 0.05f);
-            drawBox(0.5f,0.5f,0.5f);
+            glTranslatef(sf * 0.18f, -0.52f, 0.12f);
+            glScalef(0.14f, 0.28f, 0.14f);
+            glutSolidSphere(1.0f, 10, 8);
             glPopMatrix();
 
+            glColor3f(0.92f, 0.75f, 0.12f);
             glPushMatrix();
-            glTranslatef(side * 0.18f, -0.72f, 0.26f);
-            glRotatef(-18.0f, 1, 0, 0);
-            glScalef(0.15f, 0.03f, 0.18f);
-            drawBox(0.5f,0.5f,0.5f);
+            glTranslatef(sf * 0.18f, -0.74f, 0.16f);
+            glScalef(0.07f, 0.28f, 0.07f);
+            drawBox(0.5f, 0.5f, 0.5f);
+            glPopMatrix();
+
+            glColor3f(0.16f, 0.14f, 0.12f);
+            for (int t = 0; t < 3; ++t) {
+                float ta = -25.0f + t * 25.0f;
+                glPushMatrix();
+                glTranslatef(sf * 0.18f, -0.88f, 0.22f);
+                glRotatef(ta, 0, 1, 0);
+                glRotatef(-18.0f, 1, 0, 0);
+                glScalef(0.05f, 0.04f, 0.26f);
+                drawBox(0.5f, 0.5f, 0.5f);
+                glPopMatrix();
+
+                glPushMatrix();
+                glTranslatef(sf * 0.18f + sinf(ta * PI / 180.f) * 0.13f,
+                             -0.96f,
+                             0.46f + cosf(ta * PI / 180.f) * 0.04f);
+                glScalef(0.04f, 0.04f, 0.08f);
+                glutSolidSphere(1.0f, 6, 4);
+                glPopMatrix();
+            }
+
+            glPushMatrix();
+            glTranslatef(sf * 0.18f, -0.88f, 0.08f);
+            glRotatef(180.0f, 0, 1, 0);
+            glRotatef(-22.0f, 1, 0, 0);
+            glScalef(0.05f, 0.04f, 0.20f);
+            drawBox(0.5f, 0.5f, 0.5f);
             glPopMatrix();
         }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <GLUT/glut.h>
+#include "gl_headers.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -37,4 +37,18 @@ private:
     void readVertex(string& line);
     void readFace(string& line, string& currentMtl);
     void smoothNormals();
-};
+}; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
