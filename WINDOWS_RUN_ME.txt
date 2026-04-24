@@ -7,17 +7,36 @@ Contents you should have in this folder:
 - build_windows.bat
 - README_project.md
 
+Prerequisites:
+- CMake 3.10 or higher
+- A C++ compiler (Visual Studio with Desktop development for C++, or MinGW/MSYS2)
+- FreeGLUT (see installation options below)
+
+Installing FreeGLUT (choose one):
+
+Option A - vcpkg (recommended):
+    vcpkg install freeglut
+    Then run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=<path-to-vcpkg>\scripts\buildsystems\vcpkg.cmake
+
+Option B - MSYS2:
+    pacman -S mingw-w64-x86_64-freeglut
+
+Option C - Manual:
+    Download FreeGLUT from https://freeglut.sourceforge.net/
+    Place freeglut.dll in the same folder as bird_scene.exe
+
 Fastest way to run:
 1. If bird_scene.exe is included, double-click bird_scene.exe.
 2. If Windows reports that freeglut.dll is missing, place freeglut.dll in the same folder as bird_scene.exe and try again.
 
 If no executable is included:
 1. Install CMake and a C++ compiler / Visual Studio with Desktop development for C++.
-2. Double-click build_windows.bat.
-3. After build finishes, look for:
+2. Install FreeGLUT (see Prerequisites above).
+3. Double-click build_windows.bat.
+4. After build finishes, look for:
    - build\Release\bird_scene.exe
    - or build\bird_scene.exe
-4. Run the executable.
+5. Run the executable.
 
 Important:
 - Keep the models folder with the project or next to the executable.

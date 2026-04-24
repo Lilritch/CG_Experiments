@@ -8,6 +8,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
+# Windows-specific FreeGLUT fallback
+if(WIN32)
+    find_library(FREEGLUT_LIBRARY NAMES freeglut libfreeglut)
+    if(FREEGLUT_LIBRARY)
+        message(STATUS "Found FreeGLUT: ${FREEGLUT_LIBRARY}")
+        target_link_libraries(bird_scene PRIVATE ${FREEGLUT_LIBRARY})
+    endif()
+endif()
+
 add_executable(bird_scene
     main.cpp
     OBJImporter.cpp
