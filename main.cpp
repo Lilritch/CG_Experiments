@@ -465,54 +465,59 @@ void drawTreeLine() {
 
 void drawGround() {
     const ThemePalette& palette = kThemePalettes[worldTheme];
+    const float baseY = 0.0f;
+    const float detailY = 0.03f;
+    const float accentY = 0.05f;
+
     glColor3f(palette.groundA[0], palette.groundA[1], palette.groundA[2]);
     glBegin(GL_QUADS);
-    glVertex3f(-40,0,-40); glVertex3f(40,0,-40);
-    glVertex3f(40,0, 40);  glVertex3f(-40,0, 40);
+    glVertex3f(-40,baseY,-40); glVertex3f(40,baseY,-40);
+    glVertex3f(40,baseY, 40);  glVertex3f(-40,baseY, 40);
     glEnd();
 
     glColor3f(palette.groundA[0] * 0.78f, palette.groundA[1] * 0.88f, palette.groundA[2] * 0.82f);
     glBegin(GL_QUADS);
-    glVertex3f(-20,0.01f, 5); glVertex3f( -5,0.01f, 5);
-    glVertex3f( -5,0.01f,20); glVertex3f(-20,0.01f,20);
+    glVertex3f(-20,detailY, 5); glVertex3f( -5,detailY, 5);
+    glVertex3f( -5,detailY,20); glVertex3f(-20,detailY,20);
     glEnd();
     glBegin(GL_QUADS);
-    glVertex3f(8,0.01f,-8);  glVertex3f(18,0.01f,-8);
-    glVertex3f(18,0.01f, 5); glVertex3f( 8,0.01f, 5);
+    glVertex3f(8,detailY,-8);  glVertex3f(18,detailY,-8);
+    glVertex3f(18,detailY, 5); glVertex3f( 8,detailY, 5);
     glEnd();
 
     glColor3f(palette.groundB[0], palette.groundB[1], palette.groundB[2]);
     glBegin(GL_QUADS);
-    glVertex3f(-6,0.01f, 2); glVertex3f(6,0.01f, 2);
-    glVertex3f( 6,0.01f,10); glVertex3f(-6,0.01f,10);
+    glVertex3f(-6,detailY, 2); glVertex3f(6,detailY, 2);
+    glVertex3f( 6,detailY,10); glVertex3f(-6,detailY,10);
     glEnd();
 
     glColor3f(0.72f, 0.58f, 0.35f);
     glBegin(GL_QUADS);
-    glVertex3f(-1,0.01f,-5); glVertex3f(1,0.01f,-5);
-    glVertex3f( 1,0.01f,10); glVertex3f(-1,0.01f,10);
+    glVertex3f(-1,accentY,2.0f); glVertex3f(1,accentY,2.0f);
+    glVertex3f( 1,accentY,10);   glVertex3f(-1,accentY,10);
     glEnd();
 
     glColor3f(palette.groundB[0] * 1.02f, palette.groundB[1] * 1.02f, palette.groundB[2] * 0.95f);
     glBegin(GL_QUADS);
-    glVertex3f(-24,0.01f,-16); glVertex3f(-6,0.01f,-16);
-    glVertex3f(-6,0.01f, -2); glVertex3f(-24,0.01f,-2);
+    glVertex3f(-24,detailY,-16); glVertex3f(-6,detailY,-16);
+    glVertex3f(-6,detailY, -2); glVertex3f(-24,detailY,-2);
     glEnd();
 
     glColor3f(palette.groundA[0] * 0.72f, palette.groundA[1] * 0.84f, palette.groundA[2] * 0.82f);
     glBegin(GL_QUADS);
-    glVertex3f(10,0.01f,8); glVertex3f(24,0.01f,8);
-    glVertex3f(24,0.01f,22); glVertex3f(10,0.01f,22);
+    glVertex3f(10,detailY,8); glVertex3f(24,detailY,8);
+    glVertex3f(24,detailY,22); glVertex3f(10,detailY,22);
     glEnd();
 
-    glColor4f(1.0f, 1.0f, 1.0f, 0.08f);
-    for (int i = 0; i < 7; ++i) {
-        float x = -30.0f + i * 10.0f;
+    // Meadow bands add depth without relying on nearly coplanar translucent overlays.
+    glColor3f(palette.groundA[0] * 0.90f, palette.groundA[1] * 0.96f, palette.groundA[2] * 0.88f);
+    for (int i = 0; i < 5; ++i) {
+        float x = -28.0f + i * 13.0f;
         glBegin(GL_QUADS);
-        glVertex3f(x, 0.015f, -40.0f);
-        glVertex3f(x + 3.0f, 0.015f, -40.0f);
-        glVertex3f(x + 9.0f, 0.015f,  40.0f);
-        glVertex3f(x + 6.0f, 0.015f,  40.0f);
+        glVertex3f(x, accentY, -40.0f);
+        glVertex3f(x + 4.5f, accentY, -40.0f);
+        glVertex3f(x + 11.0f, accentY,  40.0f);
+        glVertex3f(x + 6.5f, accentY,  40.0f);
         glEnd();
     }
 }
@@ -914,6 +919,339 @@ void drawBuilding(float x, float z, float w, float d, float h,
     glPopMatrix();
 }
 
+void drawStreetLamp(float x, float z, float height) {
+    glPushMatrix();
+    glTranslatef(x, 0.0f, z);
+
+    glColor3f(0.22f, 0.24f, 0.28f);
+    glPushMatrix();
+    glTranslatef(0.0f, height * 0.5f, 0.0f);
+    glScalef(0.08f, height, 0.08f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, height + 0.05f, 0.0f);
+    glScalef(0.42f, 0.08f, 0.08f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    float glow = 0.72f + 0.18f * clamp01(getDayBlend());
+    glColor3f(1.0f, 0.92f * glow, 0.58f * glow);
+    glPushMatrix();
+    glTranslatef(0.16f, height, 0.0f);
+    glutSolidSphere(0.11f, 8, 8);
+    glPopMatrix();
+    glPopMatrix();
+}
+
+void drawCar(float x, float z, float heading, float bodyR, float bodyG, float bodyB) {
+    glPushMatrix();
+    glTranslatef(x, 0.10f, z);
+    glRotatef(heading, 0, 1, 0);
+
+    glColor3f(bodyR, bodyG, bodyB);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.18f, 0.0f);
+    glScalef(0.85f, 0.22f, 1.45f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(bodyR * 0.82f, bodyG * 0.84f, bodyB * 0.88f);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.40f, -0.06f);
+    glScalef(0.62f, 0.20f, 0.72f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(0.78f, 0.88f, 0.96f);
+    glBegin(GL_QUADS);
+    glVertex3f(-0.22f, 0.46f, -0.34f); glVertex3f(0.22f, 0.46f, -0.34f);
+    glVertex3f(0.22f, 0.34f, -0.56f);  glVertex3f(-0.22f, 0.34f, -0.56f);
+    glEnd();
+
+    glColor3f(0.10f, 0.10f, 0.12f);
+    const float wheelX[2] = {-0.34f, 0.34f};
+    const float wheelZ[2] = {-0.50f, 0.50f};
+    for (float wx : wheelX) {
+        for (float wz : wheelZ) {
+            glPushMatrix();
+            glTranslatef(wx, 0.06f, wz);
+            glRotatef(90.0f, 0, 1, 0);
+            glutSolidTorus(0.05f, 0.11f, 8, 10);
+            glPopMatrix();
+        }
+    }
+    glPopMatrix();
+}
+
+void drawCityWalker(float x, float z, float shirtR, float shirtG, float shirtB, float phase) {
+    float swing = sinf(simTime * 2.6f + phase) * 18.0f;
+    glPushMatrix();
+    glTranslatef(x, 0.0f, z);
+    glScalef(0.55f, 0.55f, 0.55f);
+    drawKid(0.0f, 0.0f, shirtR, shirtG, shirtB, swing, swing * 0.8f);
+    glPopMatrix();
+}
+
+void drawTrafficLight(float x, float z, bool verticalRoadGreen) {
+    glPushMatrix();
+    glTranslatef(x, 0.0f, z);
+
+    glColor3f(0.18f, 0.20f, 0.23f);
+    glPushMatrix();
+    glTranslatef(0.0f, 1.15f, 0.0f);
+    glScalef(0.09f, 2.3f, 0.09f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, 2.05f, 0.0f);
+    glScalef(0.22f, 0.55f, 0.20f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    const GLfloat brightRed[3] = {0.95f, 0.16f, 0.12f};
+    const GLfloat dimRed[3] = {0.32f, 0.08f, 0.08f};
+    const GLfloat brightYellow[3] = {0.95f, 0.78f, 0.12f};
+    const GLfloat dimYellow[3] = {0.34f, 0.26f, 0.07f};
+    const GLfloat brightGreen[3] = {0.16f, 0.88f, 0.24f};
+    const GLfloat dimGreen[3] = {0.08f, 0.24f, 0.08f};
+
+    const GLfloat* red = verticalRoadGreen ? dimRed : brightRed;
+    const GLfloat* yellow = (fmodf(simTime, 6.0f) > 4.6f && fmodf(simTime, 6.0f) < 5.2f) ? brightYellow : dimYellow;
+    const GLfloat* green = verticalRoadGreen ? brightGreen : dimGreen;
+    const float lensY[3] = {2.22f, 2.05f, 1.88f};
+    const GLfloat* colors[3] = {red, yellow, green};
+
+    for (int i = 0; i < 3; ++i) {
+        glColor3f(colors[i][0], colors[i][1], colors[i][2]);
+        glPushMatrix();
+        glTranslatef(0.0f, lensY[i], 0.11f);
+        glutSolidSphere(0.05f, 8, 8);
+        glPopMatrix();
+    }
+    glPopMatrix();
+}
+
+void drawBusStop(float x, float z) {
+    glPushMatrix();
+    glTranslatef(x, 0.0f, z);
+
+    glColor3f(0.26f, 0.28f, 0.32f);
+    const float postX[2] = {-0.7f, 0.7f};
+    for (float px : postX) {
+        glPushMatrix();
+        glTranslatef(px, 0.6f, 0.0f);
+        glScalef(0.08f, 1.2f, 0.08f);
+        glutSolidCube(1.0f);
+        glPopMatrix();
+    }
+
+    glColor3f(0.90f, 0.84f, 0.26f);
+    glPushMatrix();
+    glTranslatef(0.0f, 1.26f, 0.0f);
+    glScalef(1.6f, 0.08f, 0.55f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor4f(0.72f, 0.88f, 0.98f, 0.72f);
+    glBegin(GL_QUADS);
+    glVertex3f(-0.62f, 1.02f, 0.20f); glVertex3f(0.62f, 1.02f, 0.20f);
+    glVertex3f(0.62f, 0.24f, 0.20f);  glVertex3f(-0.62f, 0.24f, 0.20f);
+    glEnd();
+
+    glColor3f(0.46f, 0.28f, 0.12f);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.28f, -0.05f);
+    glScalef(1.0f, 0.08f, 0.22f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    glPopMatrix();
+}
+
+void drawStorefront(float x, float z, float width, float height, float awningR, float awningG, float awningB) {
+    glColor3f(0.84f, 0.80f, 0.72f);
+    glPushMatrix();
+    glTranslatef(x, height * 0.5f, z);
+    glScalef(width, height, 1.5f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(awningR, awningG, awningB);
+    glPushMatrix();
+    glTranslatef(x, height + 0.15f, z + 0.55f);
+    glScalef(width + 0.12f, 0.12f, 0.55f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(0.68f, 0.86f, 0.96f);
+    glBegin(GL_QUADS);
+    glVertex3f(x - width * 0.32f, 1.15f, z + 0.76f);
+    glVertex3f(x + width * 0.32f, 1.15f, z + 0.76f);
+    glVertex3f(x + width * 0.32f, 0.45f, z + 0.76f);
+    glVertex3f(x - width * 0.32f, 0.45f, z + 0.76f);
+    glEnd();
+}
+
+void drawCityScene() {
+    const float roadY = 0.04f;
+    const float lineY = 0.055f;
+    const float walkY = 0.05f;
+
+    // Main roads
+    glColor3f(0.18f, 0.19f, 0.22f);
+    glBegin(GL_QUADS);
+    glVertex3f(-24.0f, roadY, -28.5f); glVertex3f(24.0f, roadY, -28.5f);
+    glVertex3f(24.0f, roadY, -21.5f);  glVertex3f(-24.0f, roadY, -21.5f);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3f(-2.8f, roadY, -34.0f); glVertex3f(2.8f, roadY, -34.0f);
+    glVertex3f(2.8f, roadY, -16.0f);  glVertex3f(-2.8f, roadY, -16.0f);
+    glEnd();
+
+    // Sidewalks
+    glColor3f(0.56f, 0.56f, 0.60f);
+    glBegin(GL_QUADS);
+    glVertex3f(-24.0f, walkY, -30.0f); glVertex3f(24.0f, walkY, -30.0f);
+    glVertex3f(24.0f, walkY, -28.5f);  glVertex3f(-24.0f, walkY, -28.5f);
+    glVertex3f(-24.0f, walkY, -21.5f); glVertex3f(24.0f, walkY, -21.5f);
+    glVertex3f(24.0f, walkY, -20.0f);  glVertex3f(-24.0f, walkY, -20.0f);
+    glVertex3f(-4.2f, walkY, -34.0f);  glVertex3f(-2.8f, walkY, -34.0f);
+    glVertex3f(-2.8f, walkY, -16.0f);  glVertex3f(-4.2f, walkY, -16.0f);
+    glVertex3f(2.8f, walkY, -34.0f);   glVertex3f(4.2f, walkY, -34.0f);
+    glVertex3f(4.2f, walkY, -16.0f);   glVertex3f(2.8f, walkY, -16.0f);
+    glEnd();
+
+    // Lane markings
+    glColor3f(0.96f, 0.92f, 0.55f);
+    for (int i = 0; i < 6; ++i) {
+        float x = -21.0f + i * 8.0f;
+        glBegin(GL_QUADS);
+        glVertex3f(x, lineY, -25.18f); glVertex3f(x + 3.6f, lineY, -25.18f);
+        glVertex3f(x + 3.6f, lineY, -24.82f); glVertex3f(x, lineY, -24.82f);
+        glEnd();
+    }
+    for (int i = 0; i < 4; ++i) {
+        float z = -32.0f + i * 4.5f;
+        glBegin(GL_QUADS);
+        glVertex3f(-0.18f, lineY, z); glVertex3f(0.18f, lineY, z);
+        glVertex3f(0.18f, lineY, z + 2.2f); glVertex3f(-0.18f, lineY, z + 2.2f);
+        glEnd();
+    }
+
+    // Crosswalk
+    glColor3f(0.94f, 0.94f, 0.96f);
+    for (int i = 0; i < 7; ++i) {
+        float x = -3.0f + i * 0.9f;
+        glBegin(GL_QUADS);
+        glVertex3f(x, lineY, -27.2f); glVertex3f(x + 0.5f, lineY, -27.2f);
+        glVertex3f(x + 0.5f, lineY, -22.8f); glVertex3f(x, lineY, -22.8f);
+        glEnd();
+    }
+
+    // Buildings
+    drawBuilding(-20,-18.0f, 3.5f,3.0f, 8.5f, 0.60f,0.60f,0.65f);
+    drawBuilding(-15,-17.2f, 2.6f,2.6f,12.5f, 0.55f,0.55f,0.60f);
+    drawBuilding(-10,-18.5f, 4.2f,3.2f, 6.8f, 0.65f,0.60f,0.60f);
+    drawBuilding( -5,-17.6f, 2.2f,2.2f,15.5f, 0.50f,0.50f,0.58f);
+    drawBuilding(  1,-19.0f, 5.2f,3.5f, 9.6f, 0.60f,0.58f,0.62f);
+    drawBuilding(  8,-17.5f, 2.8f,2.6f,11.8f, 0.58f,0.62f,0.60f);
+    drawBuilding( 14,-17.0f, 3.0f,3.0f, 7.5f, 0.62f,0.60f,0.58f);
+    drawBuilding( 19,-18.3f, 2.4f,2.6f,13.2f, 0.55f,0.58f,0.65f);
+
+    // Storefront row closer to the street
+    drawStorefront(-18.0f, -31.8f, 2.8f, 1.9f, 0.82f, 0.30f, 0.24f);
+    drawStorefront(-13.5f, -31.6f, 2.2f, 1.8f, 0.24f, 0.60f, 0.88f);
+    drawStorefront(10.5f, -31.8f, 2.6f, 1.9f, 0.22f, 0.68f, 0.34f);
+    drawStorefront(15.0f, -31.5f, 2.3f, 1.7f, 0.88f, 0.72f, 0.18f);
+
+    // Small plaza kiosk
+    glColor3f(0.72f, 0.42f, 0.28f);
+    glPushMatrix();
+    glTranslatef(-8.0f, 0.55f, -31.6f);
+    glScalef(1.5f, 1.1f, 1.2f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    glColor3f(0.95f, 0.82f, 0.28f);
+    glPushMatrix();
+    glTranslatef(-8.0f, 1.25f, -31.6f);
+    glScalef(1.9f, 0.16f, 1.5f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    // Street lamps
+    const float lampXs[] = {-18.0f, -9.5f, -1.0f, 7.5f, 16.0f};
+    for (float x : lampXs) {
+        drawStreetLamp(x, -20.8f, 1.8f);
+        drawStreetLamp(x, -29.2f, 1.8f);
+    }
+
+    // Traffic control at the intersection
+    drawTrafficLight(-4.6f, -21.0f, true);
+    drawTrafficLight( 4.6f, -21.0f, true);
+    drawTrafficLight(-4.6f, -29.0f, false);
+    drawTrafficLight( 4.6f, -29.0f, false);
+
+    // Bus stop
+    drawBusStop(13.6f, -30.2f);
+
+    // Cars
+    float carA = -22.0f + fmodf(simTime * 6.0f, 44.0f);
+    float carB = 22.0f - fmodf(simTime * 4.8f, 44.0f);
+    float carC = -31.5f + fmodf(simTime * 5.2f, 16.0f);
+    float carD = -22.0f + fmodf(simTime * 3.9f + 11.0f, 44.0f);
+    drawCar(carA, -26.3f, 90.0f, 0.88f, 0.20f, 0.16f);
+    drawCar(carB, -23.7f, -90.0f, 0.18f, 0.42f, 0.88f);
+    drawCar(1.4f, carC, 180.0f, 0.94f, 0.82f, 0.20f);
+    drawCar(carD, -26.1f, 90.0f, 0.22f, 0.72f, 0.68f);
+
+    // People and activity
+    drawCityWalker(-11.4f, -30.8f, 0.90f, 0.28f, 0.22f, 0.0f);
+    drawCityWalker(-6.8f, -30.5f, 0.18f, 0.66f, 0.84f, 1.5f);
+    drawCityWalker(6.2f, -30.7f, 0.92f, 0.70f, 0.16f, 2.6f);
+    drawCityWalker(11.6f, -30.4f, 0.66f, 0.36f, 0.88f, 3.7f);
+    drawCityWalker(3.6f, -19.2f, 0.20f, 0.78f, 0.34f, 4.4f);
+    drawCityWalker(14.3f, -30.2f, 0.18f, 0.46f, 0.88f, 5.1f);
+    drawCityWalker(16.0f, -30.8f, 0.86f, 0.42f, 0.18f, 5.8f);
+
+    // Bench and street activity near the kiosk
+    glColor3f(0.46f, 0.28f, 0.12f);
+    glPushMatrix();
+    glTranslatef(-5.8f, 0.28f, -31.0f);
+    glScalef(0.9f, 0.08f, 0.28f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-6.15f, 0.16f, -31.0f);
+    glScalef(0.08f, 0.32f, 0.08f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-5.45f, 0.16f, -31.0f);
+    glScalef(0.08f, 0.32f, 0.08f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    drawBall(-7.4f + sinf(simTime * 1.6f) * 0.6f, 0.30f, -30.8f + cosf(simTime * 1.6f) * 0.3f);
+
+    // Cafe tables
+    glColor3f(0.78f, 0.78f, 0.82f);
+    for (int i = 0; i < 2; ++i) {
+        float tableX = 6.5f + i * 2.0f;
+        glPushMatrix();
+        glTranslatef(tableX, 0.42f, -31.2f);
+        glScalef(0.55f, 0.05f, 0.55f);
+        glutSolidCube(1.0f);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(tableX, 0.20f, -31.2f);
+        glScalef(0.08f, 0.40f, 0.08f);
+        glutSolidCube(1.0f);
+        glPopMatrix();
+    }
+}
+
 // ============================================================
 // BIRD SHADOW
 // ============================================================
@@ -1181,14 +1519,7 @@ void drawScene() {
         drawTree(positions[i][0], positions[i][1], scales[i]);
 
     // City
-    drawBuilding(-18,-25, 3.0f,3.0f, 8.0f, 0.60f,0.60f,0.65f);
-    drawBuilding(-14,-24, 2.5f,2.5f,12.0f, 0.55f,0.55f,0.60f);
-    drawBuilding(-10,-26, 4.0f,3.0f, 6.0f, 0.65f,0.60f,0.60f);
-    drawBuilding( -6,-25, 2.0f,2.0f,15.0f, 0.50f,0.50f,0.58f);
-    drawBuilding(  0,-27, 5.0f,3.5f, 9.0f, 0.60f,0.58f,0.62f);
-    drawBuilding(  6,-25, 2.5f,2.5f,11.0f, 0.58f,0.62f,0.60f);
-    drawBuilding( 12,-24, 3.0f,3.0f, 7.0f, 0.62f,0.60f,0.58f);
-    drawBuilding( 17,-26, 2.0f,2.5f,13.0f, 0.55f,0.58f,0.65f);
+    drawCityScene();
 
     drawBirdShadow();
     drawCollectibles();

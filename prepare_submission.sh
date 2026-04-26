@@ -2,7 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUT_DIR="${ROOT_DIR}/submission_windows"
+PACKAGE_BASENAME="${1:-studentNo_yourName_projects}"
+OUT_DIR="${ROOT_DIR}/${PACKAGE_BASENAME}"
 
 rm -rf "${OUT_DIR}"
 mkdir -p "${OUT_DIR}/models"
@@ -20,8 +21,20 @@ if [[ -f "${ROOT_DIR}/freeglut.dll" ]]; then
   cp "${ROOT_DIR}/freeglut.dll" "${OUT_DIR}/freeglut.dll"
 fi
 
+if compgen -G "${ROOT_DIR}"/*.mp4 > /dev/null; then
+  cp "${ROOT_DIR}"/*.mp4 "${OUT_DIR}/"
+fi
+
+if compgen -G "${ROOT_DIR}"/*.mov > /dev/null; then
+  cp "${ROOT_DIR}"/*.mov "${OUT_DIR}/"
+fi
+
+if [[ -d "${ROOT_DIR}/source_code" ]]; then
+  cp -R "${ROOT_DIR}/source_code" "${OUT_DIR}/source_code"
+fi
+
 cat <<EOF
-Prepared Windows submission folder:
+Prepared submission folder:
   ${OUT_DIR}
 
 Included:
@@ -29,11 +42,17 @@ Included:
   - README_project.md
   - build_windows.bat
   - models/bird.obj
+  - any .mp4/.mov videos found in repo root
 
 Optional files copied if found in repo root:
   - bird_scene.exe
   - freeglut.dll
+  - source_code/
 
 Next step:
-  Zip the submission_windows folder and send that zip to your professor.
+  1. Rename the folder if needed so it matches:
+     studentNo+yourName+"projects"
+  2. Confirm the folder contains the Windows .exe, required .dll files,
+     and your demo video with audio.
+  3. Compress this folder as .zip or .rar for submission.
 EOF

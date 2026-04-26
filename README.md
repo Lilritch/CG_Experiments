@@ -25,32 +25,41 @@ This uses the macOS OpenGL and GLUT frameworks.
 
 ### Best way to share with a Windows professor
 
-The easiest handoff is:
+Your class submission instructions require one compressed `.zip` or `.rar`
+package named:
 
-1. Send the full project folder, including `models/`.
-2. Tell them to use `build_windows.bat` if they have CMake installed.
-3. If you can, also send a prebuilt `bird_scene.exe`.
-4. If the executable was built with MinGW/MSYS2, include `freeglut.dll` next to the `.exe`.
+    studentNo+yourName+"projects"
 
-The project now searches for `models/bird.obj` from both the current working directory and the executable directory, which makes Windows launches more reliable.
+Minimum expected contents:
+
+1. `bird_scene.exe`
+2. Required non-system `.dll` files such as `freeglut.dll` if your Windows build needs them
+3. A demo video with audio showing the project running
+4. Source code files are optional, but including them is a good fallback
+
+The project searches for `models/bird.obj` from both the current working
+directory and the executable directory, which makes Windows launches more
+reliable.
 
 Recommended zip layout:
 
-    submission_windows/
+    studentNo_yourName_projects/
     ├── WINDOWS_RUN_ME.txt
     ├── README_project.md
     ├── build_windows.bat
-    ├── bird_scene.exe        (if you include a prebuilt app)
+    ├── bird_scene.exe
     ├── freeglut.dll          (if your Windows build needs it)
+    ├── demo_video.mp4
     └── models/
         └── bird.obj
 
 To prepare that folder on macOS or Linux:
 
     chmod +x prepare_submission.sh
-    ./prepare_submission.sh
+    ./prepare_submission.sh studentNo_yourName_projects
 
-This creates a `submission_windows/` folder you can zip and send.
+This creates a submission folder you can zip or rar after adding the final
+Windows executable, required DLL files, and demo video.
 
 ### Windows (recommended: CMake)
 
@@ -125,6 +134,17 @@ If Windows cannot find `freeglut.dll`, copy it next to `bird_scene.exe` before r
 
 If the app starts but cannot open the bird model, run it from the repo root or keep the `models` folder beside the executable.
 
+### Submission checklist
+
+Before uploading, confirm all of these:
+
+- The program was built for Windows and produced `bird_scene.exe`
+- The `.exe` starts on Windows
+- `models/bird.obj` is included
+- Any required non-system DLLs are next to the `.exe`
+- The demo video with audio is included
+- The archive name matches `studentNo+yourName+"projects"`
+
 ## Compatibility changes
 
 - Added `gl_headers.h` to select `GLUT/glut.h` on macOS and `GL/glut.h` on other platforms.
@@ -151,3 +171,5 @@ If the app starts but cannot open the bird model, run it from the repo root or k
 - Mouse drag: rotate the bird
 - `Ctrl` + drag: roll
 - `Shift` + drag or mouse wheel: zoom
+
+

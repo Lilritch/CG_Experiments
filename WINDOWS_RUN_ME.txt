@@ -1,8 +1,9 @@
 Bird Scene Windows Quick Start
 
 Contents you should have in this folder:
-- bird_scene.exe                (optional prebuilt app)
-- freeglut.dll                 (optional, needed by some Windows builds)
+- bird_scene.exe                (required for class submission)
+- freeglut.dll                 (include if your Windows build needs it)
+- demo video with audio        (required for class submission)
 - models\bird.obj
 - build_windows.bat
 - README_project.md
@@ -26,7 +27,7 @@ Option C - Manual:
     Place freeglut.dll in the same folder as bird_scene.exe
 
 Fastest way to run:
-1. If bird_scene.exe is included, double-click bird_scene.exe.
+1. Double-click bird_scene.exe.
 2. If Windows reports that freeglut.dll is missing, place freeglut.dll in the same folder as bird_scene.exe and try again.
 
 If no executable is included:
@@ -45,6 +46,7 @@ Important:
 Recommended submission package from the student:
 - bird_scene.exe
 - freeglut.dll
+- demo video with audio
 - models\
 - WINDOWS_RUN_ME.txt
 - README_project.md
