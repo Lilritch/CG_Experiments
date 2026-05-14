@@ -56,6 +56,9 @@ jobs:
             ls -la /mingw64/bin/*glut* || true
             exit 1
           fi
+          cp /mingw64/bin/libgcc_s_seh-1.dll studentNo_yourName_projects/
+          cp /mingw64/bin/libstdc++-6.dll studentNo_yourName_projects/
+          cp /mingw64/bin/libwinpthread-1.dll studentNo_yourName_projects/
           cp models/bird.obj studentNo_yourName_projects/models/
           cp README.md studentNo_yourName_projects/README_project.md
           cp WINDOWS_RUN_ME.txt studentNo_yourName_projects/

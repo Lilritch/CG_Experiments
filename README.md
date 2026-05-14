@@ -50,6 +50,9 @@ Recommended zip layout:
     ├── build_windows.bat
     ├── bird_scene.exe
     ├── freeglut.dll          (if your Windows build needs it)
+    ├── libgcc_s_seh-1.dll    (if built with MinGW)
+    ├── libstdc++-6.dll       (if built with MinGW)
+    ├── libwinpthread-1.dll   (if built with MinGW)
     ├── demo_video.mp4
     └── models/
         └── bird.obj
@@ -106,6 +109,9 @@ Inside that zip you should find:
 
     bird_scene.exe
     freeglut.dll
+    libgcc_s_seh-1.dll
+    libstdc++-6.dll
+    libwinpthread-1.dll
     models/bird.obj
     README_project.md
     WINDOWS_RUN_ME.txt
@@ -178,6 +184,8 @@ Before uploading, confirm all of these:
 - The `.exe` starts on Windows
 - `models/bird.obj` is included
 - Any required non-system DLLs are next to the `.exe`
+  (`freeglut.dll`, and for MinGW builds usually `libgcc_s_seh-1.dll`,
+  `libstdc++-6.dll`, and `libwinpthread-1.dll`)
 - The demo video with audio is included
 - The archive name matches `studentNo+yourName+"projects"`
 
