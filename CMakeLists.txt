@@ -31,8 +31,6 @@ if(GLUT_INCLUDE_DIRS)
     target_include_directories(bird_scene PRIVATE ${GLUT_INCLUDE_DIRS})
 endif()
 
-# Windows-specific FreeGLUT fallback for environments where FindGLUT
-# locates headers but does not expose the runtime import library cleanly.
 if(WIN32)
     find_library(FREEGLUT_LIBRARY NAMES freeglut libfreeglut)
     if(FREEGLUT_LIBRARY)

@@ -62,7 +62,6 @@ void OBJImporter::readVertex(string& line) {
 }
 
 void OBJImporter::readFace(string& line, string& currentMtl) {
-    // detect format
     int flag = 0;
     for (int i=0;i<(int)line.size();i++) {
         if (line[i]=='/') {
@@ -113,7 +112,6 @@ void OBJImporter::smoothNormals() {
     for (int i=0;i<nv;i++) {
         float l=sqrt(normalList[i].x*normalList[i].x+normalList[i].y*normalList[i].y+normalList[i].z*normalList[i].z);
         if(l>0){normalList[i].x/=l;normalList[i].y/=l;normalList[i].z/=l;}
-        // update face normal indices to use vertex index
     }
     for (auto& f : faceList) { f.na=f.a; f.nb=f.b; f.nc=f.c; }
 }

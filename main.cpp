@@ -1,14 +1,3 @@
-// ============================================================
-// SkyBird Showcase - Computer Graphics Experiment
-// Author: [Your Name]
-// Description: A stylized 3D bird flying simulation with dynamic themes,
-// weather effects, collectibles, and interactive camera controls.
-// Features: Multiple themes (Meadow, Tropical, Sunset, Dusk, Winter),
-// weather (Clear, Breezy, Rain, Magic), right-click menu for easy access,
-// shadows, and smooth animations.
-// Controls: Keyboard (WASD for movement, T/Y for theme/weather, etc.) or
-// right-click menu.
-// ============================================================
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
@@ -27,10 +16,6 @@ static constexpr int NUM_COLLECTIBLES = 8;
 #ifdef USE_OBJ_BIRD
 #include "OBJImporter.h"
 #endif
-
-// ============================================================
-// GLOBALS
-// ============================================================
 
 int winWidth = 1000, winHeight = 1000;
 
@@ -95,11 +80,11 @@ struct ThemePalette {
 };
 
 const ThemePalette kThemePalettes[] = {
-    {{0.18f,0.48f,0.84f},{0.52f,0.82f,0.98f},{0.95f,0.87f,0.72f},{0.30f,0.62f,0.26f},{0.50f,0.80f,0.34f},{0.92f,0.95f,0.98f},{0.14f,0.50f,0.78f}}, // Meadow
-    {{0.12f,0.56f,0.88f},{0.40f,0.84f,0.92f},{0.98f,0.86f,0.64f},{0.18f,0.54f,0.24f},{0.48f,0.76f,0.30f},{0.86f,0.94f,0.88f},{0.10f,0.62f,0.72f}}, // Tropical
-    {{0.32f,0.22f,0.54f},{0.92f,0.54f,0.36f},{0.99f,0.80f,0.46f},{0.34f,0.48f,0.22f},{0.70f,0.64f,0.28f},{0.98f,0.82f,0.72f},{0.30f,0.34f,0.62f}}, // Sunset
-    {{0.05f,0.10f,0.28f},{0.18f,0.24f,0.46f},{0.40f,0.32f,0.56f},{0.12f,0.26f,0.18f},{0.18f,0.34f,0.24f},{0.70f,0.74f,0.92f},{0.16f,0.24f,0.38f}}, // Dusk
-    {{0.70f,0.85f,0.95f},{0.90f,0.95f,1.00f},{0.60f,0.70f,0.80f},{0.95f,0.98f,1.00f},{0.85f,0.90f,0.95f},{0.80f,0.85f,0.90f},{0.50f,0.70f,0.90f}}  // Winter
+    {{0.18f,0.48f,0.84f},{0.52f,0.82f,0.98f},{0.95f,0.87f,0.72f},{0.30f,0.62f,0.26f},{0.50f,0.80f,0.34f},{0.92f,0.95f,0.98f},{0.14f,0.50f,0.78f}},
+    {{0.12f,0.56f,0.88f},{0.40f,0.84f,0.92f},{0.98f,0.86f,0.64f},{0.18f,0.54f,0.24f},{0.48f,0.76f,0.30f},{0.86f,0.94f,0.88f},{0.10f,0.62f,0.72f}},
+    {{0.32f,0.22f,0.54f},{0.92f,0.54f,0.36f},{0.99f,0.80f,0.46f},{0.34f,0.48f,0.22f},{0.70f,0.64f,0.28f},{0.98f,0.82f,0.72f},{0.30f,0.34f,0.62f}},
+    {{0.05f,0.10f,0.28f},{0.18f,0.24f,0.46f},{0.40f,0.32f,0.56f},{0.12f,0.26f,0.18f},{0.18f,0.34f,0.24f},{0.70f,0.74f,0.92f},{0.16f,0.24f,0.38f}},
+    {{0.70f,0.85f,0.95f},{0.90f,0.95f,1.00f},{0.60f,0.70f,0.80f},{0.95f,0.98f,1.00f},{0.85f,0.90f,0.95f},{0.80f,0.85f,0.90f},{0.50f,0.70f,0.90f}}
 };
 
 const float kCollectiblePositions[NUM_COLLECTIBLES][3] = {
@@ -203,9 +188,6 @@ void drawFilledCircle(float radius, int segments) {
     glEnd();
 }
 
-// ============================================================
-// RESET HELPERS
-// ============================================================
 
 void resetBirdPose() {
     birdX = 0.0f; birdY = 2.0f; birdZ = 0.0f;
@@ -227,9 +209,6 @@ void resetShowcaseCamera() {
     camUpX = 0.0f; camUpY = 1.0f; camUpZ = 0.0f;
 }
 
-// ============================================================
-// GEOMETRY HELPERS
-// ============================================================
 
 void drawBox(float hx, float hy, float hz) {
     GLfloat verts[8][3] = {
@@ -251,9 +230,6 @@ void drawBox(float hx, float hy, float hz) {
     face(0,1,5,4, 0.5f,0.35f,0.2f);
 }
 
-// ============================================================
-// SKY
-// ============================================================
 
 void drawSky() {
     const ThemePalette& palette = kThemePalettes[worldTheme];
@@ -344,9 +320,6 @@ void drawSky() {
     glEnable(GL_DEPTH_TEST);
 }
 
-// ============================================================
-// SUN
-// ============================================================
 
 void drawSun() {
     float sunHeight = getSunHeight();
@@ -364,9 +337,6 @@ void drawSun() {
     glPopMatrix();
 }
 
-// ============================================================
-// CLOUDS
-// ============================================================
 
 void drawCloud(float x, float y, float z, float scale) {
     float daylight = clamp01(getDayBlend() * 1.05f);
@@ -385,9 +355,6 @@ void drawCloud(float x, float y, float z, float scale) {
     glPopMatrix();
 }
 
-// ============================================================
-// POND
-// ============================================================
 
 void drawPond() {
     const ThemePalette& palette = kThemePalettes[worldTheme];
@@ -415,9 +382,6 @@ void drawPond() {
     glPopMatrix();
 }
 
-// ============================================================
-// MOUNTAINS
-// ============================================================
 
 void drawMountains() {
     float dayBlend = clamp01(getDayBlend() * 1.05f);
@@ -442,7 +406,6 @@ void drawMountains() {
     glVertex3f(-28, 0, -40); glVertex3f(-13, 8.5f,-52); glVertex3f( 2,  0, -40);
     glVertex3f(  3, 0, -40); glVertex3f( 18, 12, -52); glVertex3f(33,  0, -40);
     glEnd();
-    // Snow caps
     glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_TRIANGLES);
     glVertex3f(-20,11,-50); glVertex3f(-18,13,-50); glVertex3f(-16,11,-50);
@@ -467,9 +430,6 @@ void drawTreeLine() {
     glEnd();
 }
 
-// ============================================================
-// GROUND
-// ============================================================
 
 void drawGround() {
     const ThemePalette& palette = kThemePalettes[worldTheme];
@@ -517,7 +477,6 @@ void drawGround() {
     glVertex3f(24,detailY,22); glVertex3f(10,detailY,22);
     glEnd();
 
-    // Meadow bands add depth without relying on nearly coplanar translucent overlays.
     glColor3f(palette.groundA[0] * 0.90f, palette.groundA[1] * 0.96f, palette.groundA[2] * 0.88f);
     for (int i = 0; i < 5; ++i) {
         float x = -28.0f + i * 13.0f;
@@ -530,15 +489,11 @@ void drawGround() {
     }
 }
 
-// ============================================================
-// FLOWERS
-// ============================================================
 
 void drawFlowers(float x, float z) {
     glPushMatrix();
     glTranslatef(x, 0, z);
 
-    // Stem
     glColor3f(0.2f, 0.55f, 0.1f);
     GLUquadric* q = gluNewQuadric();
     glPushMatrix();
@@ -547,12 +502,10 @@ void drawFlowers(float x, float z) {
     glPopMatrix();
     gluDeleteQuadric(q);
 
-    // Centre
     glTranslatef(0, 0.25f, 0);
     glColor3f(1.0f, 0.85f, 0.1f);
     glutSolidSphere(0.07f, 6, 4);
 
-    // Petals
     glColor3f(1.0f, 0.3f, 0.3f);
     for (int p = 0; p < 6; p++) {
         float a = p * PI / 3.0f;
@@ -564,13 +517,9 @@ void drawFlowers(float x, float z) {
     glPopMatrix();
 }
 
-// ============================================================
-// FENCE
-// ============================================================
 
 void drawFence(float x1, float z1, float x2, float z2) {
     glColor3f(0.72f, 0.58f, 0.38f);
-    // Posts at each end
     for (int i = 0; i <= 1; i++) {
         glPushMatrix();
         float px = x1 + (x2-x1)*i;
@@ -580,29 +529,23 @@ void drawFence(float x1, float z1, float x2, float z2) {
         glutSolidCube(1.0);
         glPopMatrix();
     }
-    // Middle post
     glPushMatrix();
     glTranslatef((x1+x2)*0.5f, 0.4f, (z1+z2)*0.5f);
     glScalef(0.08f, 0.8f, 0.08f);
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Top rail
     glBegin(GL_QUADS);
     glVertex3f(x1, 0.58f, z1); glVertex3f(x2, 0.58f, z2);
     glVertex3f(x2, 0.52f, z2); glVertex3f(x1, 0.52f, z1);
     glEnd();
 
-    // Bottom rail
     glBegin(GL_QUADS);
     glVertex3f(x1, 0.28f, z1); glVertex3f(x2, 0.28f, z2);
     glVertex3f(x2, 0.22f, z2); glVertex3f(x1, 0.22f, z1);
     glEnd();
 }
 
-// ============================================================
-// KID FIGURE
-// ============================================================
 
 void drawKid(float x, float z,
              float shirtR, float shirtG, float shirtB,
@@ -610,7 +553,6 @@ void drawKid(float x, float z,
     glPushMatrix();
     glTranslatef(x, 0, z);
 
-    // Legs
     glColor3f(0.25f, 0.35f, 0.7f);
     glPushMatrix();
     glTranslatef(-0.08f, 0.2f, 0);
@@ -625,7 +567,6 @@ void drawKid(float x, float z,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Shoes
     glColor3f(0.15f, 0.1f, 0.08f);
     glPushMatrix();
     glTranslatef(-0.08f, 0.02f, 0.04f);
@@ -638,7 +579,6 @@ void drawKid(float x, float z,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Body / shirt
     glColor3f(shirtR, shirtG, shirtB);
     glPushMatrix();
     glTranslatef(0, 0.55f, 0);
@@ -646,7 +586,6 @@ void drawKid(float x, float z,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Left arm
     glColor3f(shirtR, shirtG, shirtB);
     glPushMatrix();
     glTranslatef(-0.20f, 0.58f, 0);
@@ -655,7 +594,6 @@ void drawKid(float x, float z,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Right arm
     glPushMatrix();
     glTranslatef(0.20f, 0.58f, 0);
     glRotatef(armAngle, 1, 0, 0);
@@ -663,14 +601,12 @@ void drawKid(float x, float z,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Head
     glColor3f(0.95f, 0.78f, 0.60f);
     glPushMatrix();
     glTranslatef(0, 0.88f, 0);
     glutSolidSphere(0.16f, 10, 8);
     glPopMatrix();
 
-    // Hair
     glColor3f(0.22f, 0.13f, 0.04f);
     glPushMatrix();
     glTranslatef(0, 0.97f, 0);
@@ -680,9 +616,6 @@ void drawKid(float x, float z,
     glPopMatrix();
 }
 
-// ============================================================
-// BALL
-// ============================================================
 
 void drawBall(float x, float y, float z) {
     glPushMatrix();
@@ -697,18 +630,13 @@ void drawBall(float x, float y, float z) {
     glPopMatrix();
 }
 
-// ============================================================
-// KIDS SCENE
-// ============================================================
 
 void drawKidsScene() {
-    // Fence around the clearing
     drawFence(-6, 2,   6, 2);
     drawFence( 6, 2,   6, 10);
     drawFence( 6, 10, -6, 10);
     drawFence(-6, 10, -6, 2);
 
-    // Flowers around fence line
     float fp[][2] = {
         {-5,2.5f},{-4.5f,5},{-5,7.5f},{-5,9.5f},
         { 5,3.0f},{ 4.8f,6},{ 5,8.5f},
@@ -718,33 +646,24 @@ void drawKidsScene() {
     for (auto& f : fp)
         drawFlowers(f[0], f[1]);
 
-    // Walking animation
     float walk = sinf(simTime * 3.0f) * 22.0f;
 
-    // Kid 1 — red shirt, running left to right
     drawKid(-2.5f, 5.5f,  0.9f, 0.15f, 0.15f,  walk, walk);
 
-    // Kid 2 — yellow shirt, arms raised to catch
     drawKid( 2.5f, 6.2f,  0.95f, 0.85f, 0.1f,  -38.0f, 12.0f);
 
-    // Kid 3 — green shirt, standing watching
     drawKid(-0.5f, 8.5f,  0.15f, 0.72f, 0.22f,  8.0f, 0.0f);
 
-    // Kid 4 — purple shirt, sitting (small scale)
     glPushMatrix();
     glTranslatef(3.5f, 0, 4.0f);
     glScalef(0.85f, 0.85f, 0.85f);
     glPopMatrix();
     drawKid( 3.5f, 4.0f,  0.65f, 0.2f, 0.85f,  20.0f, -5.0f);
 
-    // Ball arcing between kid 1 and kid 2
     float ballArc = fabsf(sinf(simTime * 2.8f));
     drawBall(0.0f, 0.35f + ballArc * 2.2f, 5.8f);
 }
 
-// ============================================================
-// TREE
-// ============================================================
 
 void drawCone(float base, float height, int slices) {
     GLUquadric* q = gluNewQuadric();
@@ -763,7 +682,6 @@ void drawTree(float x, float z, float scale) {
     glRotatef(sinf(simTime * (1.2f + scale * 0.25f) + x * 0.4f + z * 0.2f) * windStrength * 2.2f, 0, 0, 1);
     glScalef(scale, scale, scale);
 
-    // Trunk
     glColor3f(0.42f, 0.26f, 0.10f);
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
@@ -772,9 +690,8 @@ void drawTree(float x, float z, float scale) {
     gluDeleteQuadric(q);
     glPopMatrix();
 
-    // Three cone tiers — slightly varied greens
     float tierData[3][3] = {
-        {0.8f, 1.0f, 0.55f},  // yOff, radius, height factor
+        {0.8f, 1.0f, 0.55f},
         {1.5f, 0.75f, 0.48f},
         {2.1f, 0.52f, 0.42f}
     };
@@ -845,7 +762,6 @@ void drawCollectibles() {
         glutWireSphere(0.34f, 10, 10);
         glPopMatrix();
 
-        // Shadow
         glPushMatrix();
         glTranslatef(kCollectiblePositions[i][0], 0.01f, kCollectiblePositions[i][2]);
         glColor4f(0.1f, 0.05f, 0.05f, 0.15f);
@@ -908,13 +824,9 @@ void drawWeatherEffects() {
     }
 }
 
-// ============================================================
-// BUILDING
-// ============================================================
 
 void drawBuilding(float x, float z, float w, float d, float h,
                   float r, float g, float b) {
-    // Main body
     glPushMatrix();
     glTranslatef(x, h*0.5f, z);
     glColor3f(r, g, b);
@@ -922,7 +834,6 @@ void drawBuilding(float x, float z, float w, float d, float h,
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // Windows — simple grid of slightly lighter quads
     glColor3f(r+0.15f, g+0.15f, b+0.2f);
     int floors = (int)(h / 2.0f);
     for (int fl = 0; fl < floors; fl++) {
@@ -941,7 +852,6 @@ void drawBuilding(float x, float z, float w, float d, float h,
         glEnd();
     }
 
-    // Roof
     glPushMatrix();
     glTranslatef(x, h + 0.06f, z);
     glColor3f(r*0.55f, g*0.55f, b*0.55f);
@@ -1130,7 +1040,6 @@ void drawCityScene() {
     const float lineY = 0.055f;
     const float walkY = 0.05f;
 
-    // Main roads
     glColor3f(0.18f, 0.19f, 0.22f);
     glBegin(GL_QUADS);
     glVertex3f(-24.0f, roadY, -28.5f); glVertex3f(24.0f, roadY, -28.5f);
@@ -1141,7 +1050,6 @@ void drawCityScene() {
     glVertex3f(2.8f, roadY, -16.0f);  glVertex3f(-2.8f, roadY, -16.0f);
     glEnd();
 
-    // Sidewalks
     glColor3f(0.56f, 0.56f, 0.60f);
     glBegin(GL_QUADS);
     glVertex3f(-24.0f, walkY, -30.0f); glVertex3f(24.0f, walkY, -30.0f);
@@ -1154,7 +1062,6 @@ void drawCityScene() {
     glVertex3f(4.2f, walkY, -16.0f);   glVertex3f(2.8f, walkY, -16.0f);
     glEnd();
 
-    // Lane markings
     glColor3f(0.96f, 0.92f, 0.55f);
     for (int i = 0; i < 6; ++i) {
         float x = -21.0f + i * 8.0f;
@@ -1171,7 +1078,6 @@ void drawCityScene() {
         glEnd();
     }
 
-    // Crosswalk
     glColor3f(0.94f, 0.94f, 0.96f);
     for (int i = 0; i < 7; ++i) {
         float x = -3.0f + i * 0.9f;
@@ -1181,7 +1087,6 @@ void drawCityScene() {
         glEnd();
     }
 
-    // Buildings
     drawBuilding(-20,-18.0f, 3.5f,3.0f, 8.5f, 0.60f,0.60f,0.65f);
     drawBuilding(-15,-17.2f, 2.6f,2.6f,12.5f, 0.55f,0.55f,0.60f);
     drawBuilding(-10,-18.5f, 4.2f,3.2f, 6.8f, 0.65f,0.60f,0.60f);
@@ -1191,13 +1096,11 @@ void drawCityScene() {
     drawBuilding( 14,-17.0f, 3.0f,3.0f, 7.5f, 0.62f,0.60f,0.58f);
     drawBuilding( 19,-18.3f, 2.4f,2.6f,13.2f, 0.55f,0.58f,0.65f);
 
-    // Storefront row closer to the street
     drawStorefront(-18.0f, -31.8f, 2.8f, 1.9f, 0.82f, 0.30f, 0.24f);
     drawStorefront(-13.5f, -31.6f, 2.2f, 1.8f, 0.24f, 0.60f, 0.88f);
     drawStorefront(10.5f, -31.8f, 2.6f, 1.9f, 0.22f, 0.68f, 0.34f);
     drawStorefront(15.0f, -31.5f, 2.3f, 1.7f, 0.88f, 0.72f, 0.18f);
 
-    // Small plaza kiosk
     glColor3f(0.72f, 0.42f, 0.28f);
     glPushMatrix();
     glTranslatef(-8.0f, 0.55f, -31.6f);
@@ -1211,23 +1114,19 @@ void drawCityScene() {
     glutSolidCube(1.0f);
     glPopMatrix();
 
-    // Street lamps
     const float lampXs[] = {-18.0f, -9.5f, -1.0f, 7.5f, 16.0f};
     for (float x : lampXs) {
         drawStreetLamp(x, -20.8f, 1.8f);
         drawStreetLamp(x, -29.2f, 1.8f);
     }
 
-    // Traffic control at the intersection
     drawTrafficLight(-4.6f, -21.0f, true);
     drawTrafficLight( 4.6f, -21.0f, true);
     drawTrafficLight(-4.6f, -29.0f, false);
     drawTrafficLight( 4.6f, -29.0f, false);
 
-    // Bus stop
     drawBusStop(13.6f, -30.2f);
 
-    // Cars
     float carA = -22.0f + fmodf(simTime * 6.0f, 44.0f);
     float carB = 22.0f - fmodf(simTime * 4.8f, 44.0f);
     float carC = -31.5f + fmodf(simTime * 5.2f, 16.0f);
@@ -1237,7 +1136,6 @@ void drawCityScene() {
     drawCar(1.4f, carC, 180.0f, 0.94f, 0.82f, 0.20f);
     drawCar(carD, -26.1f, 90.0f, 0.22f, 0.72f, 0.68f);
 
-    // People and activity
     drawCityWalker(-11.4f, -30.8f, 0.90f, 0.28f, 0.22f, 0.0f);
     drawCityWalker(-6.8f, -30.5f, 0.18f, 0.66f, 0.84f, 1.5f);
     drawCityWalker(6.2f, -30.7f, 0.92f, 0.70f, 0.16f, 2.6f);
@@ -1246,7 +1144,6 @@ void drawCityScene() {
     drawCityWalker(14.3f, -30.2f, 0.18f, 0.46f, 0.88f, 5.1f);
     drawCityWalker(16.0f, -30.8f, 0.86f, 0.42f, 0.18f, 5.8f);
 
-    // Bench and street activity near the kiosk
     glColor3f(0.46f, 0.28f, 0.12f);
     glPushMatrix();
     glTranslatef(-5.8f, 0.28f, -31.0f);
@@ -1266,7 +1163,6 @@ void drawCityScene() {
 
     drawBall(-7.4f + sinf(simTime * 1.6f) * 0.6f, 0.30f, -30.8f + cosf(simTime * 1.6f) * 0.3f);
 
-    // Cafe tables
     glColor3f(0.78f, 0.78f, 0.82f);
     for (int i = 0; i < 2; ++i) {
         float tableX = 6.5f + i * 2.0f;
@@ -1283,9 +1179,6 @@ void drawCityScene() {
     }
 }
 
-// ============================================================
-// BIRD SHADOW
-// ============================================================
 
 void drawBirdShadow() {
     glPushMatrix();
@@ -1302,9 +1195,6 @@ void drawBirdShadow() {
     glPopMatrix();
 }
 
-// ============================================================
-// BIRD
-// ============================================================
 
 void drawBird(float flapAngle) {
     glPushMatrix();
@@ -1315,7 +1205,6 @@ void drawBird(float flapAngle) {
     glScalef(birdScale, birdScale, birdScale);
 
     if (birdLook == 0) {
-        // Simple boxy bird
         glColor3f(0.3f, 0.3f, 0.35f);
         glPushMatrix(); glScalef(0.5f,0.2f,0.8f); glutSolidSphere(0.5,12,10); glPopMatrix();
         glColor3f(0.35f,0.35f,0.4f);
@@ -1329,7 +1218,6 @@ void drawBird(float flapAngle) {
         glPushMatrix(); glTranslatef(0,-0.05f,0.45f); glScalef(0.3f,0.08f,0.3f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
 
     } else if (birdLook == 1) {
-        // Sleek glider
         glColor3f(0.22f,0.28f,0.33f);
         glPushMatrix(); glScalef(0.4f,0.16f,1.0f); drawBox(0.75f,0.5f,0.5f); glPopMatrix();
         glColor3f(0.15f,0.15f,0.18f);
@@ -1339,7 +1227,6 @@ void drawBird(float flapAngle) {
         glPushMatrix(); glTranslatef(0.1f,0,0.2f); glRotatef(-15,0,1,0); glScalef(1.5f,0.04f,0.25f); drawBox(0.5f,0.5f,0.5f); glPopMatrix();
 
     } else if (birdLook == 2) {
-        // Cartoon bird inspired by the reference image
         const GLfloat bodyRed[3]    = {0.96f, 0.05f, 0.18f};
         const GLfloat bellyCream[3] = {0.88f, 0.86f, 0.80f};
         const GLfloat beakYellow[3] = {0.96f, 0.84f, 0.12f};
@@ -1351,7 +1238,6 @@ void drawBird(float flapAngle) {
         const GLfloat cyanTip[3]    = {0.12f, 0.84f, 0.90f};
         const GLfloat magentaAlt[3] = {0.78f, 0.18f, 0.94f};
 
-        // Main body
         glColor3f(bodyRed[0], bodyRed[1], bodyRed[2]);
         glPushMatrix();
         glTranslatef(0.0f, 0.02f, 0.05f);
@@ -1359,7 +1245,6 @@ void drawBird(float flapAngle) {
         glutSolidSphere(0.52f, 30, 24);
         glPopMatrix();
 
-        // Soft belly
         glColor3f(bellyCream[0], bellyCream[1], bellyCream[2]);
         glPushMatrix();
         glTranslatef(0.0f, -0.34f, 0.12f);
@@ -1367,7 +1252,6 @@ void drawBird(float flapAngle) {
         glutSolidSphere(0.48f, 24, 20);
         glPopMatrix();
 
-        // Head
         glColor3f(bodyRed[0], bodyRed[1], bodyRed[2]);
         glPushMatrix();
         glTranslatef(0.0f, 0.34f, -0.88f);
@@ -1375,7 +1259,6 @@ void drawBird(float flapAngle) {
         glutSolidSphere(0.42f, 24, 20);
         glPopMatrix();
 
-        // Beak front disk
         glColor3f(beakYellow[0], beakYellow[1], beakYellow[2]);
         glPushMatrix();
         glTranslatef(0.0f, 0.27f, -1.18f);
@@ -1384,7 +1267,6 @@ void drawBird(float flapAngle) {
         glutSolidCone(1.0f, 1.0f, 24, 4);
         glPopMatrix();
 
-        // Beak center
         glColor3f(0.92f, 0.72f, 0.06f);
         glPushMatrix();
         glTranslatef(0.0f, 0.29f, -1.10f);
@@ -1392,7 +1274,6 @@ void drawBird(float flapAngle) {
         glutSolidSphere(1.0f, 18, 14);
         glPopMatrix();
 
-        // Eyes
         glColor3f(eyeBlack[0], eyeBlack[1], eyeBlack[2]);
         glPushMatrix();
         glTranslatef(-0.19f, 0.34f, -1.00f);
@@ -1413,7 +1294,6 @@ void drawBird(float flapAngle) {
         glutSolidSphere(0.025f, 8, 8);
         glPopMatrix();
 
-        // Crest
         glColor3f(crestPink[0], crestPink[1], crestPink[2]);
         for (int c = 0; c < 2; ++c) {
             glPushMatrix();
@@ -1425,7 +1305,6 @@ void drawBird(float flapAngle) {
             glPopMatrix();
         }
 
-        // Tail nub
         glColor3f(tailPurple[0], tailPurple[1], tailPurple[2]);
         glPushMatrix();
         glTranslatef(0.0f, 0.02f, 1.12f);
@@ -1434,7 +1313,6 @@ void drawBird(float flapAngle) {
         drawBox(0.5f, 0.5f, 0.5f);
         glPopMatrix();
 
-        // Blocky rainbow wings
         for (int side = -1; side <= 1; side += 2) {
             float sf = float(side);
             float sideFlap = sf * (flapAngle * 0.65f + 10.0f);
@@ -1466,7 +1344,6 @@ void drawBird(float flapAngle) {
             glPopMatrix();
         }
 
-        // Small feet tucked under the body
         for (int side = -1; side <= 1; side += 2) {
             float sf = float(side);
             glColor3f(0.92f, 0.54f, 0.10f);
@@ -1485,7 +1362,6 @@ void drawBird(float flapAngle) {
 
     } else {
 #ifdef USE_OBJ_BIRD
-        // OBJ model bird (Experiment 5)
         static OBJImporter objBird(findAssetPath("models/bird.obj"));
         glEnable(GL_NORMALIZE);
         static const GLfloat lpos[] = {5,10,5,0};
@@ -1512,9 +1388,6 @@ void drawBird(float flapAngle) {
     glPopMatrix();
 }
 
-// ============================================================
-// DRAW SCENE
-// ============================================================
 
 void drawScene() {
     drawSky();
@@ -1535,7 +1408,6 @@ void drawScene() {
     drawPond();
     drawKidsScene();
 
-    // Forest
     float positions[][2] = {
         {-8,-5},{-5,-9},{0,-10},{5,-9},{8,-5},
         {-10,0},{-10,5},{-8,9},{-5,11},
@@ -1549,7 +1421,6 @@ void drawScene() {
     for (int i = 0; i < numTrees; i++)
         drawTree(positions[i][0], positions[i][1], scales[i]);
 
-    // City
     drawCityScene();
 
     drawBirdShadow();
@@ -1557,16 +1428,12 @@ void drawScene() {
     drawWeatherEffects();
 
     float flapCycle = birdAutoFlap ? sinf(simTime * 4.0f) : 0.0f;
-    // Improve flapping: add asymmetry for more realistic motion
-    if (flapCycle > 0) flapCycle = flapCycle * 1.2f; // Faster up
-    else flapCycle = flapCycle * 0.8f; // Slower down
+    if (flapCycle > 0) flapCycle = flapCycle * 1.2f;
+    else flapCycle = flapCycle * 0.8f;
     float flapAngle = flapCycle * (24.0f + birdWingLift * 12.0f);
     drawBird(flapAngle);
 }
 
-// ============================================================
-// HUD
-// ============================================================
 
 void drawBitmapText(float x, float y, const char* text) {
     glRasterPos2f(x, y);
@@ -1634,9 +1501,6 @@ void drawHud() {
     glMatrixMode(GL_MODELVIEW);
 }
 
-// ============================================================
-// DISPLAY
-// ============================================================
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1699,18 +1563,12 @@ void display() {
     glutSwapBuffers();
 }
 
-// ============================================================
-// RESHAPE
-// ============================================================
 
 void reshape(int w, int h) {
     winWidth = w; winHeight = h;
     glViewport(0, 0, w, h);
 }
 
-// ============================================================
-// UPDATE
-// ============================================================
 
 void update() {
     simTime += deltaTime;
@@ -1764,9 +1622,6 @@ void update() {
     glutTimerFunc(16, [](int){ update(); }, 0);
 }
 
-// ============================================================
-// KEYBOARD
-// ============================================================
 
 void keyboard(unsigned char key, int x, int y) {
     float camDirX = camLookX - camX;
@@ -1861,9 +1716,6 @@ void specialKeys(int key, int x, int y) {
     glutPostRedisplay();
 }
 
-// ============================================================
-// MOUSE
-// ============================================================
 
 void mouseButton(int button, int state, int x, int y) {
     if (button == 3 && state == GLUT_DOWN) {
@@ -1931,9 +1783,6 @@ void mouseMotion(int x, int y) {
     glutPostRedisplay();
 }
 
-// ============================================================
-// MENU
-// ============================================================
 
 void menuAction(int val) {
     switch (val) {
@@ -1962,9 +1811,6 @@ void initMenu() {
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-// ============================================================
-// INIT + MAIN
-// ============================================================
 
 void init() {
     glEnable(GL_DEPTH_TEST);
@@ -2038,7 +1884,6 @@ int main(int argc, char** argv) {
     glutMouseFunc(mouseButton);
     glutMotionFunc(mouseMotion);
 
-    // Create menus
     int themeMenu = glutCreateMenu(themeMenuFunc);
     glutAddMenuEntry("Meadow", THEME_MEADOW);
     glutAddMenuEntry("Tropical", THEME_TROPICAL);
