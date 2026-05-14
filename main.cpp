@@ -1,7 +1,13 @@
 // ============================================================
-// Bird Flying Over a Forest Scene
-// Covers: Experiments 1–5
-// Mac: g++ main.cpp OBJImporter.cpp -framework OpenGL -framework GLUT -o bird_scene && ./bird_scene
+// SkyBird Showcase - Computer Graphics Experiment
+// Author: [Your Name]
+// Description: A stylized 3D bird flying simulation with dynamic themes,
+// weather effects, collectibles, and interactive camera controls.
+// Features: Multiple themes (Meadow, Tropical, Sunset, Dusk, Winter),
+// weather (Clear, Breezy, Rain, Magic), right-click menu for easy access,
+// shadows, and smooth animations.
+// Controls: Keyboard (WASD for movement, T/Y for theme/weather, etc.) or
+// right-click menu.
 // ============================================================
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -73,7 +79,7 @@ bool collectibleTaken[NUM_COLLECTIBLES] = {false};
 float collectibleSpin = 0.0f;
 std::string executableDir = ".";
 
-enum WorldTheme { THEME_MEADOW, THEME_TROPICAL, THEME_SUNSET, THEME_DUSK };
+enum WorldTheme { THEME_MEADOW, THEME_TROPICAL, THEME_SUNSET, THEME_DUSK, THEME_WINTER };
 enum WeatherMode { WEATHER_CLEAR, WEATHER_BREEZY, WEATHER_RAIN, WEATHER_MAGIC };
 WorldTheme worldTheme = THEME_MEADOW;
 WeatherMode weatherMode = WEATHER_CLEAR;
@@ -89,10 +95,11 @@ struct ThemePalette {
 };
 
 const ThemePalette kThemePalettes[] = {
-    {{0.18f,0.48f,0.84f},{0.52f,0.82f,0.98f},{0.95f,0.87f,0.72f},{0.30f,0.62f,0.26f},{0.50f,0.80f,0.34f},{0.92f,0.95f,0.98f},{0.14f,0.50f,0.78f}},
-    {{0.12f,0.56f,0.88f},{0.40f,0.84f,0.92f},{0.98f,0.86f,0.64f},{0.18f,0.54f,0.24f},{0.48f,0.76f,0.30f},{0.86f,0.94f,0.88f},{0.10f,0.62f,0.72f}},
-    {{0.32f,0.22f,0.54f},{0.92f,0.54f,0.36f},{0.99f,0.80f,0.46f},{0.34f,0.48f,0.22f},{0.70f,0.64f,0.28f},{0.98f,0.82f,0.72f},{0.30f,0.34f,0.62f}},
-    {{0.05f,0.10f,0.28f},{0.18f,0.24f,0.46f},{0.40f,0.32f,0.56f},{0.12f,0.26f,0.18f},{0.18f,0.34f,0.24f},{0.70f,0.74f,0.92f},{0.16f,0.24f,0.38f}}
+    {{0.18f,0.48f,0.84f},{0.52f,0.82f,0.98f},{0.95f,0.87f,0.72f},{0.30f,0.62f,0.26f},{0.50f,0.80f,0.34f},{0.92f,0.95f,0.98f},{0.14f,0.50f,0.78f}}, // Meadow
+    {{0.12f,0.56f,0.88f},{0.40f,0.84f,0.92f},{0.98f,0.86f,0.64f},{0.18f,0.54f,0.24f},{0.48f,0.76f,0.30f},{0.86f,0.94f,0.88f},{0.10f,0.62f,0.72f}}, // Tropical
+    {{0.32f,0.22f,0.54f},{0.92f,0.54f,0.36f},{0.99f,0.80f,0.46f},{0.34f,0.48f,0.22f},{0.70f,0.64f,0.28f},{0.98f,0.82f,0.72f},{0.30f,0.34f,0.62f}}, // Sunset
+    {{0.05f,0.10f,0.28f},{0.18f,0.24f,0.46f},{0.40f,0.32f,0.56f},{0.12f,0.26f,0.18f},{0.18f,0.34f,0.24f},{0.70f,0.74f,0.92f},{0.16f,0.24f,0.38f}}, // Dusk
+    {{0.70f,0.85f,0.95f},{0.90f,0.95f,1.00f},{0.60f,0.70f,0.80f},{0.95f,0.98f,1.00f},{0.85f,0.90f,0.95f},{0.80f,0.85f,0.90f},{0.50f,0.70f,0.90f}}  // Winter
 };
 
 const float kCollectiblePositions[NUM_COLLECTIBLES][3] = {
@@ -152,6 +159,7 @@ const char* themeName() {
         case THEME_TROPICAL: return "Tropical";
         case THEME_SUNSET:   return "Sunset";
         case THEME_DUSK:     return "Dusk";
+        case THEME_WINTER:   return "Winter";
         case THEME_MEADOW:
         default:             return "Meadow";
     }
@@ -836,44 +844,67 @@ void drawCollectibles() {
         glColor4f(1.0f, 0.98f, 0.74f, 0.35f);
         glutWireSphere(0.34f, 10, 10);
         glPopMatrix();
+
+        // Shadow
+        glPushMatrix();
+        glTranslatef(kCollectiblePositions[i][0], 0.01f, kCollectiblePositions[i][2]);
+        glColor4f(0.1f, 0.05f, 0.05f, 0.15f);
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3f(0, 0, 0);
+        for (int j = 0; j <= 20; ++j) {
+            float ang = (2.0f * PI * j) / 20.0f;
+            glVertex3f(cosf(ang) * 0.4f, 0, sinf(ang) * 0.4f);
+        }
+        glEnd();
+        glPopMatrix();
     }
 }
 
 void drawWeatherEffects() {
     if (weatherMode == WEATHER_RAIN) {
         glColor4f(0.72f, 0.84f, 1.0f, 0.34f);
+        glLineWidth(1.5f);
         glBegin(GL_LINES);
-        for (int i = 0; i < 70; ++i) {
-            float x = -28.0f + fmodf(i * 1.7f + simTime * 16.0f, 56.0f);
-            float z = -28.0f + fmodf(i * 2.3f + simTime * 9.0f, 56.0f);
-            float y = 10.0f - fmodf(i * 0.6f + simTime * 20.0f, 10.0f);
+        for (int i = 0; i < 100; ++i) {
+            float x = -35.0f + fmodf(i * 1.5f + simTime * 18.0f, 70.0f);
+            float z = -35.0f + fmodf(i * 2.0f + simTime * 12.0f, 70.0f);
+            float y = 12.0f - fmodf(i * 0.8f + simTime * 22.0f, 12.0f);
+            float length = 1.5f + 0.5f * sinf(i * 0.1f);
             glVertex3f(x, y, z);
-            glVertex3f(x - 0.5f, y - 1.4f, z + 0.2f);
+            glVertex3f(x - 0.3f * length, y - length, z + 0.1f * length);
         }
         glEnd();
+        glLineWidth(1.0f);
     } else if (weatherMode == WEATHER_MAGIC) {
-        glPointSize(4.0f);
+        glPointSize(5.0f);
         glBegin(GL_POINTS);
-        for (int i = 0; i < 50; ++i) {
-            float x = birdX - 10.0f + fmodf(i * 2.1f + simTime * 0.9f, 20.0f);
-            float y = 1.2f + fmodf(i * 0.8f + simTime * 1.8f, 7.5f);
-            float z = birdZ - 10.0f + fmodf(i * 3.2f + simTime * 0.7f, 20.0f);
-            float glow = 0.55f + 0.45f * sinf(simTime * 4.0f + i * 0.7f);
-            glColor4f(0.80f, 0.62f + glow * 0.25f, 1.0f, 0.25f + glow * 0.5f);
+        for (int i = 0; i < 80; ++i) {
+            float x = birdX - 12.0f + fmodf(i * 2.5f + simTime * 1.2f, 24.0f);
+            float y = 1.5f + fmodf(i * 1.0f + simTime * 2.0f, 10.0f);
+            float z = birdZ - 12.0f + fmodf(i * 3.5f + simTime * 0.8f, 24.0f);
+            float twinkle = 0.5f + 0.5f * sinf(simTime * 5.0f + i * 0.8f);
+            float hue = fmodf(i * 0.1f + simTime * 0.5f, 1.0f);
+            if (hue < 0.33f) glColor4f(1.0f, 0.5f + hue * 1.5f, 0.5f, twinkle * 0.6f);
+            else if (hue < 0.66f) glColor4f(0.5f + (hue - 0.33f) * 1.5f, 1.0f, 0.5f, twinkle * 0.6f);
+            else glColor4f(0.5f, 0.5f + (hue - 0.66f) * 1.5f, 1.0f, twinkle * 0.6f);
             glVertex3f(x, y, z);
         }
         glEnd();
+        glPointSize(1.0f);
     } else if (weatherMode == WEATHER_BREEZY) {
-        glColor4f(1.0f, 1.0f, 1.0f, 0.18f);
+        glColor4f(1.0f, 1.0f, 1.0f, 0.22f);
+        glLineWidth(2.0f);
         glBegin(GL_LINES);
-        for (int i = 0; i < 18; ++i) {
-            float x = -26.0f + fmodf(i * 3.4f + simTime * 6.0f, 54.0f);
-            float y = 2.0f + fmodf(i * 0.7f + simTime * 1.3f, 12.0f);
-            float z = -12.0f + sinf(simTime * 0.8f + i) * 10.0f;
+        for (int i = 0; i < 25; ++i) {
+            float x = -30.0f + fmodf(i * 3.0f + simTime * 8.0f, 60.0f);
+            float y = 2.5f + fmodf(i * 0.9f + simTime * 1.5f, 15.0f);
+            float z = -15.0f + sinf(simTime * 1.0f + i * 0.2f) * 12.0f;
+            float wind = 2.0f + 0.5f * sinf(simTime * 2.0f + i);
             glVertex3f(x, y, z);
-            glVertex3f(x + 1.6f, y + 0.1f, z);
+            glVertex3f(x + wind, y + 0.2f, z);
         }
         glEnd();
+        glLineWidth(1.0f);
     }
 }
 
@@ -1526,6 +1557,9 @@ void drawScene() {
     drawWeatherEffects();
 
     float flapCycle = birdAutoFlap ? sinf(simTime * 4.0f) : 0.0f;
+    // Improve flapping: add asymmetry for more realistic motion
+    if (flapCycle > 0) flapCycle = flapCycle * 1.2f; // Faster up
+    else flapCycle = flapCycle * 0.8f; // Slower down
     float flapAngle = flapCycle * (24.0f + birdWingLift * 12.0f);
     drawBird(flapAngle);
 }
@@ -1767,7 +1801,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'h': showHud = !showHud; break;
         case 'k': showControls = !showControls; break;
         case 'm': autoShowcase = !autoShowcase; cameraMode = CAM_SHOWCASE; break;
-        case 't': worldTheme = WorldTheme((worldTheme + 1) % 4); break;
+        case 't': worldTheme = WorldTheme((worldTheme + 1) % 5); break;
         case 'y': weatherMode = WeatherMode((weatherMode + 1) % 4); break;
         case 'r': resetBirdPose(); cameraMode = CAM_SHOWCASE; resetShowcaseCamera(); break;
         case 'z': birdZoom = fmaxf(3.5f, birdZoom-0.35f); cameraMode = CAM_SHOWCASE; break;
@@ -1945,6 +1979,42 @@ void init() {
     initMenu();
 }
 
+void themeMenuFunc(int value) {
+    worldTheme = (WorldTheme)value;
+    glutPostRedisplay();
+}
+
+void weatherMenuFunc(int value) {
+    weatherMode = (WeatherMode)value;
+    glutPostRedisplay();
+}
+
+void cameraMenuFunc(int value) {
+    cameraMode = (CameraMode)value;
+    glutPostRedisplay();
+}
+
+void controlMenuFunc(int value) {
+    if (value == 0) {
+        controlMode = BirdControl;
+    } else if (value == 1) {
+        controlMode = CameraControl;
+        cameraMode = CAM_FREE;
+    }
+    glutPostRedisplay();
+}
+
+void toggleMenuFunc(int value) {
+    switch (value) {
+        case 0: showHud = !showHud; break;
+        case 1: showControls = !showControls; break;
+        case 2: autoShowcase = !autoShowcase; break;
+        case 3: birdAutoFlight = !birdAutoFlight; break;
+        case 4: paused = !paused; break;
+    }
+    glutPostRedisplay();
+}
+
 int main(int argc, char** argv) {
     if (argc > 0 && argv[0] && argv[0][0] != '\0') {
         std::filesystem::path exePath(argv[0]);
@@ -1967,6 +2037,50 @@ int main(int argc, char** argv) {
     glutSpecialFunc(specialKeys);
     glutMouseFunc(mouseButton);
     glutMotionFunc(mouseMotion);
+
+    // Create menus
+    int themeMenu = glutCreateMenu(themeMenuFunc);
+    glutAddMenuEntry("Meadow", THEME_MEADOW);
+    glutAddMenuEntry("Tropical", THEME_TROPICAL);
+    glutAddMenuEntry("Sunset", THEME_SUNSET);
+    glutAddMenuEntry("Dusk", THEME_DUSK);
+    glutAddMenuEntry("Winter", THEME_WINTER);
+
+    int weatherMenu = glutCreateMenu(weatherMenuFunc);
+    glutAddMenuEntry("Clear", WEATHER_CLEAR);
+    glutAddMenuEntry("Breezy", WEATHER_BREEZY);
+    glutAddMenuEntry("Rain", WEATHER_RAIN);
+    glutAddMenuEntry("Magic", WEATHER_MAGIC);
+
+    int cameraMenu = glutCreateMenu(cameraMenuFunc);
+    glutAddMenuEntry("Showcase", CAM_SHOWCASE);
+    glutAddMenuEntry("Follow", CAM_FOLLOW);
+    glutAddMenuEntry("Front", CAM_FRONT);
+    glutAddMenuEntry("Back", CAM_BACK);
+    glutAddMenuEntry("Left", CAM_LEFT);
+    glutAddMenuEntry("Right", CAM_RIGHT);
+    glutAddMenuEntry("Top", CAM_TOP);
+    glutAddMenuEntry("Free", CAM_FREE);
+
+    int controlMenu = glutCreateMenu(controlMenuFunc);
+    glutAddMenuEntry("Bird Control", 0);
+    glutAddMenuEntry("Camera Control", 1);
+
+    int toggleMenu = glutCreateMenu(toggleMenuFunc);
+    glutAddMenuEntry("HUD", 0);
+    glutAddMenuEntry("Controls", 1);
+    glutAddMenuEntry("Auto Showcase", 2);
+    glutAddMenuEntry("Auto Flight", 3);
+    glutAddMenuEntry("Pause", 4);
+
+    int mainMenu = glutCreateMenu(NULL);
+    glutAddSubMenu("Theme", themeMenu);
+    glutAddSubMenu("Weather", weatherMenu);
+    glutAddSubMenu("Camera", cameraMenu);
+    glutAddSubMenu("Control", controlMenu);
+    glutAddSubMenu("Toggles", toggleMenu);
+
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 
     glutTimerFunc(16, [](int){ update(); }, 0);
     glutMainLoop();

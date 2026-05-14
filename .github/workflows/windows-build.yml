@@ -1,0 +1,51 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up MSYS2 MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-freeglut
+            zip
+
+      - name: Build bird_scene.exe
+        run: |
+          g++ -std=c++17 -Wall -Wno-deprecated main.cpp OBJImporter.cpp -o bird_scene.exe -lopengl32 -lglu32 -lfreeglut
+
+      - name: Prepare submission files
+        run: |
+          mkdir -p studentNo_yourName_projects/models
+          cp bird_scene.exe studentNo_yourName_projects/
+          cp /mingw64/bin/freeglut.dll studentNo_yourName_projects/
+          cp models/bird.obj studentNo_yourName_projects/models/
+          cp README.md studentNo_yourName_projects/README_project.md
+          cp WINDOWS_RUN_ME.txt studentNo_yourName_projects/
+          cp build_windows.bat studentNo_yourName_projects/
+          zip -r studentNo_yourName_projects.zip studentNo_yourName_projects
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-bird-scene-package
+          path: studentNo_yourName_projects.zip

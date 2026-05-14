@@ -6,11 +6,12 @@ This project renders a stylized bird flying through a polished OpenGL showcase s
 
 - Cartoon bird with a custom colorful look.
 - Dynamic sky with time-of-day lighting.
-- Theme presets: meadow, tropical, sunset, and dusk.
+- Theme presets: meadow, tropical, sunset, dusk, and winter.
 - Weather presets: clear, breezy, rain, and magic particles.
 - Animated clouds, floating islands, distant flock silhouettes, and wind-reactive trees.
-- Collectible rings and a lightweight score/distance HUD.
+- Collectible rings with shadows and a lightweight score/distance HUD.
 - Title card, pause flow, demo camera orbit, and multiple camera modes.
+- Right-click context menu for easy theme, weather, and control selection.
 
 ## Build and run
 
@@ -53,6 +54,8 @@ Recommended zip layout:
     └── models/
         └── bird.obj
 
+Controls: Use keyboard (WASD, etc.) or right-click menu for themes/weather.
+
 To prepare that folder on macOS or Linux:
 
     chmod +x prepare_submission.sh
@@ -77,6 +80,39 @@ Common output locations:
 
     build\Release\bird_scene.exe
     build\bird_scene.exe
+
+### Windows build without a Windows computer: GitHub Actions
+
+This repo includes a GitHub Actions workflow at
+`.github/workflows/windows-build.yml` that can build the Windows executable
+for you online.
+
+1. Create a GitHub repository.
+2. Upload or push this whole project folder to that repository, including the
+   `.github/workflows/windows-build.yml` file.
+3. Open the repository page on GitHub.
+4. Click `Actions`.
+5. Click `Build Windows EXE`.
+6. Click `Run workflow`.
+7. Wait for the workflow to finish.
+8. Open the finished workflow run and download the artifact named
+   `windows-bird-scene-package`.
+
+The downloaded artifact contains:
+
+    studentNo_yourName_projects.zip
+
+Inside that zip you should find:
+
+    bird_scene.exe
+    freeglut.dll
+    models/bird.obj
+    README_project.md
+    WINDOWS_RUN_ME.txt
+    build_windows.bat
+
+Rename the folder or zip to match your required student number and name, then
+add your demo video with audio before making the final submission archive.
 
 ### Windows (Visual Studio)
 
@@ -171,5 +207,3 @@ Before uploading, confirm all of these:
 - Mouse drag: rotate the bird
 - `Ctrl` + drag: roll
 - `Shift` + drag or mouse wheel: zoom
-
-
